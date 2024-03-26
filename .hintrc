@@ -1,0 +1,28 @@
+{
+  "extends": [
+    "development"
+  ],
+  "hints": {
+    "compat-api/css": [
+      "default",
+      {
+        "ignore": [
+          "font-synthesis",
+          "backdrop-filter",
+          "-webkit-tap-highlight-color",
+          "-webkit-font-feature-settings",
+          "-webkit-text-size-adjust",
+          "text-decoration-skip-ink",
+          "text-align: -webkit-match-parent",
+          "-webkit-overflow-scrolling",
+          "overflow-anchor",
+          "accent-color",
+          "print-color-adjust",
+          "-ms-touch-action",
+          "-ms-perspective"
+        ]
+      }
+    ],
+    "css-prefix-order": "off"
+  }
+}
