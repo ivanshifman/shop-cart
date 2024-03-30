@@ -9,7 +9,7 @@ import Sponsor from "./Sponsor";
 
 const Home = () => {
   return (
-    <div>
+    <>
       <Banner />
       <HomeCategory />
       <CategoryShowCase />
@@ -18,7 +18,7 @@ const Home = () => {
       <AboutUs />
       <AppSection />
       <Sponsor />
-    </div>
+    </>
   );
 };
 

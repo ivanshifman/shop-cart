@@ -1,8 +1,10 @@
+import PageHeader from "../components/PageHeader"
+
 const Blog = () => {
   return (
-    <div>
-      blog
-    </div>
+    <>
+      <PageHeader title="Blog" curPage="Blog"/>
+    </>
   )
 }
 

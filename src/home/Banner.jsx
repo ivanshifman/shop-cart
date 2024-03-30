@@ -44,7 +44,7 @@ const Banner = () => {
       <div className="container">
         <div className="banner-content">
           {title}
-          <form>
+          <form onSubmit={(e => e.preventDefault())}>
             <SelectedCategory select={"all"} />
             <input
               type="text"
