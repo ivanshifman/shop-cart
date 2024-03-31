@@ -5,6 +5,8 @@ import ProductCards from "./ProductCards"
 import Pagination from "./Pagination"
 import Search from "./Search"
 import ShopCategory from "./ShopCategory"
+import PopularPost from "./PopularPost"
+import Tags from "./Tags"
 
 const Shop = () => {
 
@@ -67,6 +69,8 @@ const Shop = () => {
                     <aside>
                         <Search products={products} gridList={gridList}/>
                         <ShopCategory filterItem={filterItem} menuItems={menuItems} setProducts={setProducts} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory}/>
+                        <PopularPost />
+                        <Tags />
                     </aside>
                 </div>
             </div>
