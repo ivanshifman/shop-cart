@@ -3087,6 +3087,7 @@
                 }
               }
               textarea {
+                resize: none;
                 border: 1px solid $border-color;
                 @extend %w-100;
                 padding: 10px;
@@ -3529,6 +3530,7 @@
       box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.06);
       padding: 25px;
       color: $body-color;
+      resize: none;
       display: flex;
     }
     button {
@@ -3992,6 +3994,7 @@
               width: calc(100% - 70px);
               form {
                 textarea {
+                  resize: none;
                   background: #29303b;
                   border-color: transparent;
                   color: rgba(183, 198, 210, 0.62);

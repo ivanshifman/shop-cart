@@ -5512,6 +5512,7 @@ button {
   color: #e9ba17;
 }
 .shop-single .review .review-content .review-showing .client-review .review-form form textarea {
+  resize: none;
   border: 1px solid #ecf0f3;
   padding: 10px;
   outline: none;
@@ -5887,6 +5888,7 @@ button {
   box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.06);
   padding: 25px;
   color: #391965;
+  resize: none;
   display: flex;
 }
 .contact-form .form-group button {
@@ -6264,6 +6266,7 @@ button {
   width: calc(100% - 70px);
 }
 .overview-announce-section .course-view-bottom .tab-content .announcement-area .announcement-lists .student-reviwe .student-content form textarea {
+  resize: none;
   background: #29303b;
   border-color: transparent;
   color: rgba(183, 198, 210, 0.62);
@@ -6561,6 +6564,12 @@ button {
   .comment-respond .add-comment .comment-form input[type=text]:nth-child(3) {
     width: 100% !important;
   }
+}
+.comment-respond .add-comment .comment-form input, .comment-respond .add-comment .comment-form textarea {
+  resize: none;
+}
+.comment-respond .add-comment .comment-form textarea {
+  resize: none;
 }
 .comment-respond .add-comment .comment-form p.comment-form-cookies-consent input {
   -webkit-transform: translateY(5px);

@@ -379,9 +379,11 @@
                 @extend %outline-none;
                 @extend %mb-20;
                 @extend %bg-border;
+                resize: none
             }
             textarea {
                 @extend %p-15;
+                resize: none
             }
             p.comment-form-cookies-consent {
                 @extend %w-100;

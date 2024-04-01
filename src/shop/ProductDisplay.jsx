@@ -44,7 +44,7 @@ const ProductDisplay = ({ item }) => {
         img: img,
         name: name,
         price: price,
-        quantity: quantity,
+        quantity: preQuantity,
         size: size,
         color: color,
         coupon: coupon
