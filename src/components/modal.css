@@ -1,0 +1,109 @@
+.modalCard {
+  /* height: 100vh; */
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  background-color: #fff;
+}
+
+.launch {
+  height: 50px;
+}
+
+.close {
+  font-size: 21px;
+  cursor: pointer;
+}
+
+.modal-body {
+  height: 450px;
+}
+
+.nav-tabs {
+  border: none !important;
+}
+
+.nav-tabs .nav-link.active {
+  color: #495057;
+  background-color: #fff;
+  border-color: #ffffff #ffffff #fff;
+  border-top: 3px solid blue !important;
+}
+
+.nav-tabs .nav-link {
+  margin-bottom: -1px;
+  border: 1px solid transparent;
+  border-top-left-radius: 0rem;
+  border-top-right-radius: 0rem;
+  border-top: 3px solid #eee;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.nav-tabs .nav-link:hover {
+  border-color: #e9ecef #ffffff #ffffff;
+}
+
+.nav-tabs {
+  display: table !important;
+  width: 100%;
+}
+
+.nav-item {
+  display: table-cell;
+}
+
+.form-control {
+  border: none;
+  border-bottom: 2px solid #ad9c9c5e !important;
+  font-weight: 600;
+}
+
+.form-control:focus {
+  color: #495057;
+  background-color: #fff;
+  border-color: #8bbafe !important;
+  outline: 0;
+  box-shadow: none;
+}
+
+.inputbox {
+  position: relative;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.inputbox span {
+  position: absolute;
+  top: 7px;
+  left: 11px;
+  transition: 0.5s;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.inputbox input:focus ~ span {
+  transform: translateX(-0px) translateY(-15px);
+  font-size: 12px;
+}
+
+.inputbox input:valid ~ span {
+  transform: translateX(-0px) translateY(-15px);
+  font-size: 12px;
+}
+
+.pay button {
+  padding: 7px 8px;
+  border-radius: 8px;
+  text-transform: uppercase;
+  font-weight: 400;
+  font-size: 1rem;
+}
+
+.p-Disclaimer {
+  font-size: 0.8rem;
+}

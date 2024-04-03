@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import PageHeader from "../components/PageHeader";
 import { Link } from "react-router-dom";
 import delImgUrl from "../assets/images/shop/del.png";
+import CheckOutPage from "./CheckOutPage";
 
 const CartPage = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -69,148 +70,183 @@ const CartPage = () => {
       <div className="shop-cart padding-tb">
         <div className="container">
           <div className="section-wrapper">
-            <div className="cart-top">
-              <table>
-                <thead>
-                  <tr>
-                    <th className="cat-product">Product</th>
-                    <th className="cat-price">Price</th>
-                    <th className="cat-quantity">Quantity</th>
-                    <th className="cat-topprice">Total</th>
-                    <th className="cat-edit">Edit</th>
-                  </tr>
-                </thead>
+            {cartItems.length === 0 ? (
+              <h2 className="title text-center fs-1 text-danger">There are no products in the cart</h2>
+            ) : (
+              <>
+                <div className="cart-top">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th className="cat-product">Product</th>
+                        <th className="cat-price">Price</th>
+                        <th className="cat-quantity">Quantity</th>
+                        <th className="cat-topprice">Total</th>
+                        <th className="cat-edit">Edit</th>
+                      </tr>
+                    </thead>
 
-                <tbody>
-                  {cartItems.map((item, i) => (
-                    <tr key={i}>
-                      <td className="product-item cat-product">
-                        <div className="p-thumb">
-                          <Link to={`/shop/${item.id}`}>
-                            <img src={item.img} alt={item.name} />
-                          </Link>
-                        </div>
-                        <div className="p-content">
-                          <Link to={`/shop/${item.id}`}>{item.name}</Link>
-                        </div>
-                      </td>
+                    <tbody>
+                      {cartItems.map((item, i) => (
+                        <tr key={i}>
+                          <td className="product-item cat-product">
+                            <div className="p-thumb">
+                              <Link to={`/shop/${item.id}`}>
+                                <img src={item.img} alt={item.name} />
+                              </Link>
+                            </div>
+                            <div className="p-content">
+                              <Link to={`/shop/${item.id}`}>{item.name}</Link>
+                            </div>
+                          </td>
 
-                      <td className="cat-price">$ {item.price}</td>
+                          <td className="cat-price">$ {item.price}</td>
 
-                      <td className="cat-quantity">
-                        <div className="cart-plus-minus">
-                          <div
-                            className="dec qtybutton"
-                            onClick={() => handleDecrease(item)}
-                          >
-                            -
+                          <td className="cat-quantity">
+                            <div className="cart-plus-minus">
+                              <div
+                                className="dec qtybutton"
+                                onClick={() => handleDecrease(item)}
+                              >
+                                -
+                              </div>
+                              <input
+                                type="text"
+                                className="cart-plus-minus-box"
+                                name="qtybutton"
+                                value={item.quantity}
+                                readOnly
+                              />
+                              <div
+                                className="inc qtybutton"
+                                onClick={() => handleIncrease(item)}
+                              >
+                                +
+                              </div>
+                            </div>
+                          </td>
+
+                          <td className="cat-toprice">
+                            ${calculateTotalPrice(item)}
+                          </td>
+
+                          <td className="cat-edit">
+                            <a href="#" onClick={() => handleRemoveItem(item)}>
+                              <img src={delImgUrl} alt="delete-product" />
+                            </a>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                <div className="cart-bottom">
+                  <div className="cart-checkout-box">
+                    <form
+                      className="coupon"
+                      onClick={(e) => e.preventDefault()}
+                    >
+                      <input
+                        className="cart-page-input-text"
+                        type="text"
+                        name="coupon"
+                        id="coupon"
+                        placeholder="Coupon code ...."
+                      />
+                      <input type="submit" value="Apply coupon" />
+                    </form>
+
+                    <form
+                      className="cart-checkout"
+                      onClick={(e) => e.preventDefault()}
+                    >
+                      <input type="submit" value="Update cart" />
+                      <div>
+                        <CheckOutPage />
+                      </div>
+                    </form>
+                  </div>
+
+                  <div className="shiping-box">
+                    <div className="row">
+                      <div className="col-md-6 col-12">
+                        <div className="calculate-shiping">
+                          <h3>Calculate shipping</h3>
+                          <div className="outline-select">
+                            <select
+                              required
+                              onChange={(e) =>
+                                setSelectedCountry(e.target.value)
+                              }
+                              value={selectedCountry}
+                            >
+                              <option value="" disabled>
+                                Select country
+                              </option>
+                              <option value="ar">Argentina</option>
+                              <option value="usa">USA</option>
+                              <option value="uk">United Kingdom</option>
+                            </select>
+                            <span className="select-icon">
+                              <i className="icofont-rounded-down"></i>
+                            </span>
+                          </div>
+
+                          <div className="outline-select shipping-select">
+                            <select required>
+                              <option value="" disabled={!selectedCountry}>
+                                Select city
+                              </option>
+                              {cities.map((city, index) => (
+                                <option key={index} value={city}>
+                                  {city}
+                                </option>
+                              ))}
+                            </select>
+                            <span className="select-icon">
+                              <i className="icofont-rounded-down"></i>
+                            </span>
                           </div>
                           <input
                             type="text"
-                            className="cart-plus-minus-box"
-                            name="qtybutton"
-                            value={item.quantity}
-                            readOnly
+                            className="cart-page-input-text"
+                            name="postalCode"
+                            id="postalCode"
+                            placeholder="PostCode/ZIP"
+                            required
                           />
-                          <div
-                            className="inc qtybutton"
-                            onClick={() => handleIncrease(item)}
-                          >
-                            +
-                          </div>
+                          <button type="submit">Update adress</button>
                         </div>
-                      </td>
-
-                      <td className="cat-toprice">
-                        ${calculateTotalPrice(item)}
-                      </td>
-
-                      <td className="cat-edit">
-                        <a href="#" onClick={() => handleRemoveItem(item)}>
-                          <img src={delImgUrl} alt="delete-product" />
-                        </a>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            <div className="cart-bottom">
-              <div className="cart-checkout-box">
-                <form className="coupon" onClick={(e) => e.preventDefault()}>
-                  <input
-                    className="cart-page-input-text"
-                    type="text"
-                    name="coupon"
-                    id="coupon"
-                    placeholder="Coupon code ...."
-                  />
-                  <input type="submit" value="Apply coupon" />
-                </form>
-
-                <form
-                  className="cart-checkout"
-                  onClick={(e) => e.preventDefault()}
-                >
-                  <input type="submit" value="Update cart" />
-                  <div>CheckOutPage</div>
-                </form>
-              </div>
-
-              <div className="shiping-box">
-                <div className="row">
-                  <div className="col-md-6 col-12">
-                    <div className="calculate-shiping">
-                      <h3>Calculate shiping</h3>
-                      <div className="outline-select">
-                        <select
-                          required
-                          onChange={(e) => setSelectedCountry(e.target.value)}
-                          value={selectedCountry}
-                        >
-                          <option value="" disabled>
-                            Select country
-                          </option>
-                          <option value="ar">Argentina</option>
-                          <option value="usa">USA</option>
-                          <option value="uk">United Kingdom</option>
-                        </select>
-                        <span className="select-icon">
-                          <i className="icofont-rounded-down"></i>
-                        </span>
                       </div>
-
-                      <div className="outline-select shipping-select">
-                        <select required>
-                          <option value="" disabled={!selectedCountry}>
-                            Select city
-                          </option>
-                          {cities.map((city, index) => (
-                            <option key={index} value={city}>
-                              {city}
-                            </option>
-                          ))}
-                        </select>
-                        <span className="select-icon">
-                          <i className="icofont-rounded-down"></i>
-                        </span>
+                      <div className="col-md-6 col-12">
+                        <div className="cart-overview">
+                          <h3>Cart totals</h3>
+                          <ul className="lab-ul">
+                            <li>
+                              <span className="pull-left">Cart subtotal</span>
+                              <p className="pull-right">$ {cartSubTotal}</p>
+                            </li>
+                            <li>
+                              <span className="pull-left">
+                                Shipping and handling
+                              </span>
+                              <p className="pull-right">Free shipping</p>
+                            </li>
+                            <li>
+                              <span className="pull-left">Order total</span>
+                              <p className="pull-right">
+                                $ {orderTotal.toFixed(2)}
+                              </p>
+                            </li>
+                          </ul>
+                        </div>
                       </div>
-                      <input
-                        type="text"
-                        className="cart-page-input-text"
-                        name="postalCode"
-                        id="postalCode"
-                        placeholder="PostCode/ZIP"
-                        required
-                      />
-                      <button type="submit">Update adress</button>
                     </div>
                   </div>
-                  <div className="col-md-6 col-12"></div>
                 </div>
-              </div>
-            </div>
+              </>
+            )}
           </div>
         </div>
       </div>
