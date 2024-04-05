@@ -16,14 +16,22 @@ const CheckOutPage = () => {
     watch,
   } = useForm();
 
+  const handleOrderConfirm = () => {
+    alert("Your order is placed successfuly!");
+    localStorage.removeItem("cart");
+    navigate(from, { replace: true });
+  };
+
   const onSubmit = (data) => {
     console.log(data);
     reset();
+    handleOrderConfirm();
   };
 
   const onSubmitTwo = (data) => {
     console.log(data);
     reset();
+    handleOrderConfirm();
   };
 
   const handleTabChange = (tabId) => {
@@ -35,12 +43,6 @@ const CheckOutPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const from = location.state?.from?.pathname || "/";
-
-  const handleOrderConfirm = () => {
-    alert("Your order is placed successfuly!");
-    localStorage.removeItem("cart");
-    navigate(from, { replace: true });
-  };
 
   return (
     <div className="modalCard">
@@ -55,7 +57,7 @@ const CheckOutPage = () => {
         className="modal fade"
         centered
       >
-        <div className="modal-dialog text-center m-3">
+        <div className="modal-dialog text-center m-3 overflow-auto">
           <h5 className="px-3 mb-3 w-100">Select your payment method</h5>
           <div className="modal-content w-100">
             <div className="modal-body w-100">
@@ -111,9 +113,9 @@ const CheckOutPage = () => {
                         <div className="inputbox">
                           <input
                             type="text"
-                            id="name"
+                            id="nameshop"
                             className="form-control"
-                            {...register("name", {
+                            {...register("nameshop", {
                               required: {
                                 value: true,
                                 message: "Name is required",
@@ -134,18 +136,18 @@ const CheckOutPage = () => {
                             })}
                           />
                           <span>Cardholder name</span>
-                          {errors.name && (
-                            <p className="fs-6 text-danger fw-bold">
-                              {errors.name.message}
+                          {errors.nameshop && (
+                            <p className="p-error text-danger fw-bold">
+                              {errors.nameshop.message}
                             </p>
                           )}
                         </div>
                         <div className="inputbox">
                           <input
                             type="tel"
-                            id="phone"
+                            id="phoneshop"
                             className="form-control"
-                            {...register("phone", {
+                            {...register("phoneshop", {
                               required: {
                                 value: true,
                                 message: "Phone is required",
@@ -166,9 +168,9 @@ const CheckOutPage = () => {
                             })}
                           />
                           <span>Card number</span>
-                          {errors.phone && (
-                            <p className="fs-6 text-danger fw-bold">
-                              {errors.phone.message}
+                          {errors.phoneshop && (
+                            <p className="p-error text-danger fw-bold">
+                              {errors.phoneshop.message}
                             </p>
                           )}
                         </div>
@@ -195,7 +197,7 @@ const CheckOutPage = () => {
                             />
                             <span>Address </span>
                             {errors.address && (
-                              <p className="fs-6 text-danger fw-bold">
+                              <p className="p-error text-danger fw-bold">
                                 {errors.address.message}
                               </p>
                             )}
@@ -226,7 +228,7 @@ const CheckOutPage = () => {
                             />
                             <span>CVV </span>
                             {errors.cvv && (
-                              <p className="fs-6 text-danger fw-bold">
+                              <p className="p-error text-danger fw-bold">
                                 {errors.cvv.message}
                               </p>
                             )}
@@ -236,7 +238,7 @@ const CheckOutPage = () => {
                           <button
                             type="submit"
                             className="btn btn-success btn-block w-100"
-                            onClick={handleOrderConfirm}
+                            onClick={handleSubmit(onSubmit)}
                           >
                             Add card
                           </button>
@@ -288,7 +290,7 @@ const CheckOutPage = () => {
                           />
                           <span>Your name </span>
                           {errors.namepaypal && (
-                            <p className="fs-6 text-danger fw-bold">
+                            <p className="p-error text-danger fw-bold">
                               {errors.namepaypal.message}
                             </p>
                           )}
@@ -320,7 +322,7 @@ const CheckOutPage = () => {
                           />
                           <span>Your number </span>
                           {errors.numberpaypal && (
-                            <p className="fs-6 text-danger fw-bold">
+                            <p className="p-error text-danger fw-bold">
                               {errors.numberpaypal.message}
                             </p>
                           )}
@@ -345,7 +347,7 @@ const CheckOutPage = () => {
                             />
                             <span>Enter your email </span>
                             {errors.emailpaypal && (
-                              <p className="fs-6 text-danger fw-bold">
+                              <p className="p-error text-danger fw-bold">
                                 {errors.emailpaypal.message}
                               </p>
                             )}
@@ -354,9 +356,9 @@ const CheckOutPage = () => {
                           <div className="inputbox">
                             <input
                               type="email"
-                              id="emailrepeat"
+                              id="emailrepeatpay"
                               className="form-control"
-                              {...register("emailrepeat", {
+                              {...register("emailrepeatpay", {
                                 required: {
                                   value: true,
                                   message: "Confirm email is required",
@@ -367,9 +369,9 @@ const CheckOutPage = () => {
                               })}
                             />
                             <span>Repeat your email </span>
-                            {errors.emailrepeat && (
-                              <p className="fs-6 text-danger fw-bold">
-                                {errors.emailrepeat.message}
+                            {errors.emailrepeatpay && (
+                              <p className="p-error text-danger fw-bold">
+                                {errors.emailrepeatpay.message}
                               </p>
                             )}
                           </div>
@@ -378,7 +380,7 @@ const CheckOutPage = () => {
                           <button
                             type="submit"
                             className="btn btn-success btn-block w-100"
-                            onClick={handleOrderConfirm}
+                            onClick={handleSubmit(onSubmitTwo)}
                           >
                             Add paypal
                           </button>

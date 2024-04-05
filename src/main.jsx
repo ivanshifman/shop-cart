@@ -14,6 +14,8 @@ import Blog from "./blog/Blog.jsx";
 import Shop from "./shop/Shop.jsx";
 import SingleProduct from "./shop/SingleProduct.jsx";
 import CartPage from "./shop/CartPage.jsx";
+import SingleBlog from "./blog/SingleBlog.jsx";
+import About from "./about/About.jsx";
 
 const router = createBrowserRouter([
   {
@@ -21,7 +23,9 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       { path: "/", element: <Home /> },
+      { path: "/about", element: <About /> },
       { path: "/blog", element: <Blog /> },
+      { path: "/blog/:id", element: <SingleBlog /> },
       { path: "/shop", element: <Shop /> },
       { path: "/shop/:id", element: <SingleProduct /> },
       { path: "/cart-page", element: <CartPage /> },
