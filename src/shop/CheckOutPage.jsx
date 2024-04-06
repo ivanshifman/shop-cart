@@ -185,14 +185,6 @@ const CheckOutPage = () => {
                                   value: true,
                                   message: "Address is required",
                                 },
-                                minLength: {
-                                  value: 7,
-                                  message: "Address must have seven numbers",
-                                },
-                                maxLength: {
-                                  value: 30,
-                                  message: "Address must have thirty numbers",
-                                },
                               })}
                             />
                             <span>Address </span>
