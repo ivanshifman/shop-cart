@@ -20,6 +20,7 @@ import Contact from "./contact/Contact.jsx";
 import AuthProvider from "./context/AuthProvider.jsx";
 import PrivateRoute from "./privateRoute/PrivateRoute.jsx";
 import Login from "./components/Login.jsx";
+import SignUp from "./components/SignUp.jsx";
 
 const router = createBrowserRouter([
   {
@@ -33,13 +34,24 @@ const router = createBrowserRouter([
       { path: "/contact", element: <Contact /> },
       { path: "/shop", element: <Shop /> },
       { path: "/shop/:id", element: <SingleProduct /> },
-      { path: "/cart-page", element: <PrivateRoute><CartPage /></PrivateRoute> },
+      {
+        path: "/cart-page",
+        element: (
+          <PrivateRoute>
+            <CartPage />
+          </PrivateRoute>
+        ),
+      },
     ],
   },
   {
     path: "/login",
-    element: <Login />
-  }
+    element: <Login />,
+  },
+  {
+    path: "/signup",
+    element: <SignUp />,
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(

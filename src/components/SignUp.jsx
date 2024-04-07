@@ -1,11 +1,11 @@
 import { useContext } from "react";
-import { AuthContext } from "../context/AuthProvider";
-import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { useNavigate, useLocation, Link } from "react-router-dom";
+import { AuthContext } from "../context/AuthProvider";
 
-const title = "Login";
+const title = "Register";
 const socialTitle = "Login with social media";
-const btnText = "Login now";
+const btnText = "Sign Up now";
 
 const socialList = [
   { iconName: "icofont-facebook", className: "facebook" },
@@ -15,8 +15,8 @@ const socialList = [
   { iconName: "icofont-pinterest", className: "pinterest" },
 ];
 
-const Login = () => {
-  const { signUpWithGmail, login } = useContext(AuthContext);
+const SignUp = () => {
+  const { signUpWithGmail, createUser } = useContext(AuthContext);
   const location = useLocation();
   const navigate = useNavigate();
   const from = location.state?.from?.pathname || "/";
@@ -28,13 +28,10 @@ const Login = () => {
     formState: { errors },
   } = useForm();
 
-  const handleLogin = () => {
-    const email = watch("emaillog");
-    const password = watch("passwordlog");
-    login(email, password)
+  const handleRegister = () => {
+    signUpWithGmail()
       .then((res) => {
         const user = res.user;
-        alert("Login successfully");
         navigate(from, { replace: true });
       })
       .catch((error) => {
@@ -42,10 +39,13 @@ const Login = () => {
       });
   };
 
-  const handleRegister = () => {
-    signUpWithGmail()
-      .then((res) => {
-        const user = res.user;
+  const handleSignUp = () => {
+    const email = watch("emailsign");
+    const password = watch("passwordsign");
+    createUser(email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        alert("Account creted succesfully done!");
         navigate(from, { replace: true });
       })
       .catch((error) => {
@@ -59,13 +59,46 @@ const Login = () => {
         <div className="container">
           <div className="account-wrapper">
             <h3 className="title">{title}</h3>
-            <form className="account-form" onSubmit={handleSubmit(handleLogin)}>
+            <form
+              className="account-form"
+              onSubmit={handleSubmit(handleSignUp)}
+            >
+              <div className="form-group">
+                <input
+                  type="text"
+                  id="namesign"
+                  placeholder="Full name *"
+                  {...register("namesign", {
+                    required: {
+                      value: true,
+                      message: "Name is required",
+                    },
+                    pattern: {
+                      value: /^[^\d]*$/,
+                      message: "Name must not contain numbers",
+                    },
+                    minLength: {
+                      value: 3,
+                      message: "Name must be at least 3 characters",
+                    },
+                    maxLength: {
+                      value: 20,
+                      message: "Name must be less than 20 characters",
+                    },
+                  })}
+                />
+                {errors.namesign && (
+                  <p className="fs-6 text-danger fw-bold">
+                    {errors.namesign.message}
+                  </p>
+                )}
+              </div>
               <div className="form-group">
                 <input
                   type="email"
-                  id="emaillog"
+                  id="emailsign"
                   placeholder="Email address *"
-                  {...register("emaillog", {
+                  {...register("emailsign", {
                     required: {
                       value: true,
                       message: "Email is required",
@@ -76,18 +109,18 @@ const Login = () => {
                     },
                   })}
                 />
-                {errors.emaillog && (
+                {errors.emailsign && (
                   <p className="fs-6 text-danger fw-bold">
-                    {errors.emaillog.message}
+                    {errors.emailsign.message}
                   </p>
                 )}
               </div>
               <div className="form-group">
                 <input
                   type="password"
-                  id="passwordlog"
+                  id="passwordsign"
                   placeholder="Password *"
-                  {...register("passwordlog", {
+                  {...register("passwordsign", {
                     required: {
                       value: true,
                       message: "Password is required",
@@ -106,21 +139,34 @@ const Login = () => {
                     },
                   })}
                 />
-                {errors.passwordlog && (
+                {errors.passwordsign && (
                   <p className="fs-6 text-danger fw-bold">
-                    {errors.passwordlog.message}
+                    {errors.passwordsign.message}
                   </p>
                 )}
               </div>
               <div className="form-group">
-                <div className="d-flex justify-content-between flex-wrap pt-sm-2">
-                  <div className="checkgroup">
-                    <input type="checkbox" id="checkbox" />
-                    <label htmlFor="checkbox">Remember me</label>
-                  </div>
-                  <Link to="/forgetpass">Forget password?</Link>
-                </div>
+                <input
+                  type="password"
+                  id="passwordsignconfirm"
+                  placeholder="Confirm password *"
+                  {...register("passwordsignconfirm", {
+                    required: {
+                      value: true,
+                      message: "Confirm password is required",
+                    },
+                    validate: (value) =>
+                      value === watch("passwordsign") ||
+                      "Passwords do not match",
+                  })}
+                />
+                {errors.passwordsignconfirm && (
+                  <p className="fs-6 text-danger fw-bold">
+                    {errors.passwordsignconfirm.message}
+                  </p>
+                )}
               </div>
+
               <div className="form-group">
                 <button className="d-block lab-btn" type="submit">
                   <span>{btnText}</span>
@@ -130,7 +176,7 @@ const Login = () => {
 
             <div className="account-bottom">
               <span className="d-block cate pt-1">
-                Don't have an account? <Link to="/signup">Sign Up</Link>
+                Have an account? <Link to="/login">Login</Link>
               </span>
               <span className="or">
                 <span>or</span>
@@ -155,4 +201,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default SignUp;

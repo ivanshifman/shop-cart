@@ -60,7 +60,7 @@ const LocationSprade = () => {
           <div className="clients">
             {clientsList.map((val, i) => (
               <div key={i} className="client-list">
-                <Link to="/singup" className="client-content">
+                <Link to="/signup" className="client-content">
                   <span>{val.text}</span>
                 </Link>
                 <div className="client-thumb">
