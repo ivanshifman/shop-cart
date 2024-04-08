@@ -12,37 +12,37 @@ const desc =
 const clientsList = [
   {
     imgUrl: "/src/assets/images/clients/avater.jpg",
-    imgAlt: "education thumb rajibraj91 rajibraj",
+    imgAlt: "education thumb",
     text: "Join with Us",
   },
   {
     imgUrl: "/src/assets/images/clients/avater.jpg",
-    imgAlt: "education thumb rajibraj91 rajibraj",
+    imgAlt: "education thumb",
     text: "Join with Us",
   },
   {
     imgUrl: "/src/assets/images/clients/avater.jpg",
-    imgAlt: "education thumb rajibraj91 rajibraj",
+    imgAlt: "education thumb",
     text: "Join with Us",
   },
   {
     imgUrl: "/src/assets/images/clients/avater.jpg",
-    imgAlt: "education thumb rajibraj91 rajibraj",
+    imgAlt: "education thumb",
     text: "Join with Us",
   },
   {
     imgUrl: "/src/assets/images/clients/avater.jpg",
-    imgAlt: "education thumb rajibraj91 rajibraj",
+    imgAlt: "education thumb",
     text: "Join with Us",
   },
   {
     imgUrl: "/src/assets/images/clients/avater.jpg",
-    imgAlt: "education thumb rajibraj91 rajibraj",
+    imgAlt: "education thumb",
     text: "Join with Us",
   },
   {
     imgUrl: "/src/assets/images/clients/avater.jpg",
-    imgAlt: "education thumb rajibraj91 rajibraj",
+    imgAlt: "education thumb",
     text: "Join with Us",
   },
 ];
@@ -60,7 +60,7 @@ const LocationSprade = () => {
           <div className="clients">
             {clientsList.map((val, i) => (
               <div key={i} className="client-list">
-                <Link to="/signup" className="client-content">
+                <Link to="/about" className="client-content">
                   <span>{val.text}</span>
                 </Link>
                 <div className="client-thumb">

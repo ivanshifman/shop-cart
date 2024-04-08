@@ -67,7 +67,7 @@ const Shop = () => {
                 </div>
                 <div className="col-lg-4 col-12">
                     <aside>
-                        <Search products={products} gridList={gridList}/>
+                        <Search products={products}/>
                         <ShopCategory filterItem={filterItem} menuItems={menuItems} setProducts={setProducts} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory}/>
                         <PopularPost />
                         <Tags />

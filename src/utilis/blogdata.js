@@ -9,7 +9,7 @@ const blogList = [
         metaList: [
             {
                 iconName: 'icofont-ui-user',
-                text: 'Rajib Raj',
+                text: 'John Smith',
             },
             {
                 iconName: 'icofont-calendar',
@@ -28,7 +28,7 @@ const blogList = [
         metaList: [
             {
                 iconName: 'icofont-ui-user',
-                text: 'Rajib Raj',
+                text: 'John Smith',
             },
             {
                 iconName: 'icofont-calendar',
@@ -47,7 +47,7 @@ const blogList = [
         metaList: [
             {
                 iconName: 'icofont-ui-user',
-                text: 'Rajib Raj',
+                text: 'John Smith',
             },
             {
                 iconName: 'icofont-calendar',
@@ -66,7 +66,7 @@ const blogList = [
         metaList: [
             {
                 iconName: 'icofont-ui-user',
-                text: 'Rajib Raj',
+                text: 'John Smith',
             },
             {
                 iconName: 'icofont-calendar',
@@ -85,7 +85,7 @@ const blogList = [
         metaList: [
             {
                 iconName: 'icofont-ui-user',
-                text: 'Rajib Raj',
+                text: 'John Smith',
             },
             {
                 iconName: 'icofont-calendar',
@@ -104,7 +104,7 @@ const blogList = [
         metaList: [
             {
                 iconName: 'icofont-ui-user',
-                text: 'Rajib Raj',
+                text: 'John Smith',
             },
             {
                 iconName: 'icofont-calendar',
@@ -123,7 +123,7 @@ const blogList = [
         metaList: [
             {
                 iconName: 'icofont-ui-user',
-                text: 'Rajib Raj',
+                text: 'John Smith',
             },
             {
                 iconName: 'icofont-calendar',
@@ -142,7 +142,7 @@ const blogList = [
         metaList: [
             {
                 iconName: 'icofont-ui-user',
-                text: 'Rajib Raj',
+                text: 'John Smith',
             },
             {
                 iconName: 'icofont-calendar',
@@ -161,7 +161,7 @@ const blogList = [
         metaList: [
             {
                 iconName: 'icofont-ui-user',
-                text: 'Rajib Raj',
+                text: 'John Smith',
             },
             {
                 iconName: 'icofont-calendar',

@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthProvider";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -20,6 +20,7 @@ const Login = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const from = location.state?.from?.pathname || "/";
+  const [errorMessage, setErrorMessage] = useState("");
 
   const {
     register,
@@ -39,6 +40,7 @@ const Login = () => {
       })
       .catch((error) => {
         console.error(error);
+        setErrorMessage("Email or password are not valid");
       });
   };
 
@@ -126,6 +128,7 @@ const Login = () => {
                   <span>{btnText}</span>
                 </button>
               </div>
+              {errorMessage && <p className="text-danger fw-bold">{errorMessage}</p>}
             </form>
 
             <div className="account-bottom">

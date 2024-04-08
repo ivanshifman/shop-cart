@@ -12,16 +12,32 @@ const desc = "We have the largest collection of products";
 
 const Banner = () => {
   const [searchInput, setSearchInput] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("all");
   const [filteredProducts, setFilteredProducts] = useState(productData);
+
+  const categories = Array.from(new Set(productData.map((product) => product.category)));
 
   const handleSearch = (e) => {
     const searchTerm = e.target.value;
     setSearchInput(searchTerm);
 
-    const filtered = productData.filter((product) =>
-      product.name.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase())
+    const filtered = productData.filter(
+      (product) =>
+        product.name.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase()) &&
+        (selectedCategory === "all" || product.category === selectedCategory)
     );
 
+    setFilteredProducts(filtered);
+  };
+
+  const handleSelectCategory = (category) => {
+    setSelectedCategory(category);
+    setSearchInput("");
+    const filtered = productData.filter(
+      (product) =>
+        (category === "all" || product.category === category) &&
+        product.name.toLocaleLowerCase().includes(searchInput.toLocaleLowerCase())
+    );
     setFilteredProducts(filtered);
   };
 
@@ -30,8 +46,12 @@ const Banner = () => {
       <div className="container">
         <div className="banner-content">
           {title}
-          <form onSubmit={(e => e.preventDefault())}>
-            <SelectedCategory select={"all"} />
+          <form onSubmit={(e) => e.preventDefault()}>
+            <SelectedCategory
+              categories={categories}
+              selectedCategory={selectedCategory}
+              onSelectCategory={handleSelectCategory}
+            />
             <input
               type="text"
               name="search"

@@ -54,7 +54,7 @@ const AboutUs = () => {
                         <span className='subtitle'>{subTitle}</span>
                         <h2 className='title'>{title}</h2>
                         <p>{desc}</p>
-                        <Link to="/signup" className='lab-btn'>Apply now</Link>
+                        <Link to="/about" className='lab-btn'>Apply now</Link>
                     </div>
                 </div>
 
