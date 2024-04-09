@@ -1,15 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { toast } from 'react-hot-toast';
+
 
 const ProductDisplay = ({ item }) => {
   const desc =
     "Discover our versatile and high-quality product, designed to meet your needs. With innovative features and a modern design, it is perfect for any occasion.";
-
   const { name, id, price, seller, ratingsCount, quantity, stock, img } = item;
   const [preQuantity, setPreQuantity] = useState(quantity);
   const [size, setSize] = useState("Select size");
   const [color, setColor] = useState("Select color");
   const [coupon, setCoupon] = useState("");
+  const [notSelect, setNotSelect] = useState(null);
 
   const handleSizeChange = (e) => {
     setSize(e.target.value);
@@ -31,34 +33,57 @@ const ProductDisplay = ({ item }) => {
     }
   };
 
+  useEffect(() => {
+    if (size !== "Select size" && color !== "Select color") {
+      setNotSelect(null);
+    }
+  }, [size, color]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (size === "Select size" || color === "Select color") {
-        console.log("Please select size and color");
-        return;
-      }
+       setNotSelect(<p className="text-danger fs-6 fw-bolder mt-3">Please select size and color</p>)
+       return
+    }
+
+    item.stock -= preQuantity;
 
     const product = {
-        id: id,
-        img: img,
-        name: name,
-        price: price,
-        quantity: preQuantity,
-        size: size,
-        color: color,
-        coupon: coupon
-    }
+      id: id,
+      img: img,
+      name: name,
+      price: price,
+      quantity: preQuantity,
+      stock: stock - preQuantity,
+      size: size,
+      color: color,
+      coupon: coupon,
+    };
 
     const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
 
-    const existingProductIndex = existingCart.findIndex((item) => item.id === id);
+    const existingProductIndex = existingCart.findIndex(
+      (item) => item.id === id
+    );
 
-    if(existingProductIndex !== -1) {
-        existingCart[existingProductIndex].quantity += preQuantity;
+    if (existingProductIndex !== -1) {
+      existingCart[existingProductIndex].quantity += preQuantity;
+      existingCart[existingProductIndex].stock -= preQuantity;
     } else {
-        existingCart.push(product);
+      existingCart.push(product);
     }
+
+    toast.success(`${preQuantity} products added`, {
+      duration: 3000,
+      position: 'top-right',
+      style: {
+        background: '#367F32',
+        color: '#fff',
+        fontSize: '1.2rem',
+        marginRight: '1rem',
+      },
+    });
 
     localStorage.setItem("cart", JSON.stringify(existingCart));
 
@@ -66,7 +91,7 @@ const ProductDisplay = ({ item }) => {
     setSize("Select size");
     setColor("Select color");
     setCoupon("");
-  }
+  };
 
   return (
     <div>
@@ -86,62 +111,67 @@ const ProductDisplay = ({ item }) => {
       </div>
 
       <div>
-        <form onSubmit={handleSubmit}>
-          <div className="select-product size">
-            <select value={size} onChange={handleSizeChange} required>
-              <option disabled>Select size</option>
-              <option>SM</option>
-              <option>MD</option>
-              <option>LG</option>
-              <option>XL</option>
-              <option>XXL</option>
-            </select>
-            <i className="icofont-rounded-down"></i>
-          </div>
-          <div className="select-product color">
-            <select value={color} onChange={handleColorChange} required>
-              <option disabled>Select color</option>
-              <option>Black</option>
-              <option>Blue</option>
-              <option>Grey</option>
-              <option>Red</option>
-              <option>White</option>
-            </select>
-            <i className="icofont-rounded-down"></i>
-          </div>
-
-          <div className="cart-plus-minus">
-            <div className="dec qtybutton" onClick={handleDecrease}>
-              -
+        {stock > 0 ? (
+          <form onSubmit={handleSubmit}>
+            <div className="select-product size">
+              <select value={size} onChange={handleSizeChange} required>
+                <option disabled>Select size</option>
+                <option>SM</option>
+                <option>MD</option>
+                <option>LG</option>
+                <option>XL</option>
+                <option>XXL</option>
+              </select>
+              <i className="icofont-rounded-down"></i>
             </div>
-            <input
-              className="cart-plus-minus-box"
-              type="text"
-              name="qtybutton"
-              id="qtybutton"
-              value={preQuantity}
-              readOnly
-            />
-            <div className="inc qtybutton" onClick={handleIncrease}>
-              +
+            <div className="select-product color">
+              <select value={color} onChange={handleColorChange} required>
+                <option disabled>Select color</option>
+                <option>Black</option>
+                <option>Blue</option>
+                <option>Grey</option>
+                <option>Red</option>
+                <option>White</option>
+              </select>
+              <i className="icofont-rounded-down"></i>
             </div>
-          </div>
+            
+            <div className="cart-plus-minus">
+              <div className="dec qtybutton" onClick={handleDecrease}>
+                -
+              </div>
+              <input
+                className="cart-plus-minus-box"
+                type="text"
+                name="qtybutton"
+                id="qtybutton"
+                value={preQuantity}
+                readOnly
+              />
+              <div className="inc qtybutton" onClick={handleIncrease}>
+                +
+              </div>
+            </div>
 
-          <div className="discount-code mb-2">
-            <input
-              type="text"
-              placeholder="Enter discount code"
-              onChange={(e) => setCoupon(e.target.value)}
-            />
-          </div>
+            <div className="discount-code mb-2">
+              <input
+                type="text"
+                placeholder="Enter discount code"
+                onChange={(e) => setCoupon(e.target.value)}
+              />
+            </div>
 
-          <button type="submit" className="lab-btn">
-            <span>Add to cart</span>
-          </button>
-          <Link to="/cart-page" className="lab-btn bg-primary">
-            <span>Check out</span>
-          </Link>
-        </form>
+            <button type="submit" className="lab-btn">
+              <span>Add to cart</span>
+            </button>
+            <Link to="/cart-page" className="lab-btn bg-primary">
+              <span>Check out</span>
+            </Link>
+            {notSelect}
+          </form>
+        ) : (
+          <div className="text-danger fs-3 fw-bolder">Out of stock</div>
+        )}
       </div>
     </div>
   );

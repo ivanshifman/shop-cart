@@ -3,6 +3,7 @@ import PageHeader from "../components/PageHeader";
 import { Link } from "react-router-dom";
 import delImgUrl from "../assets/images/shop/del.png";
 import CheckOutPage from "./CheckOutPage";
+import { toast } from "react-hot-toast";
 
 const CartPage = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -31,15 +32,39 @@ const CartPage = () => {
   };
 
   const handleIncrease = (item) => {
-    item.quantity += 1;
-    setCartItems([...cartItems]);
+    if (item.stock > 0) {
+      item.quantity += 1;
+      item.stock -= 1;
+      toast.success("Product added", {
+        duration: 3000,
+        position: "top-right",
+        style: {
+          background: "#367F32",
+          color: "#fff",
+          fontSize: "1.2rem",
+          marginRight: "1rem",
+        },
+      });
+      setCartItems([...cartItems]);
 
-    localStorage.setItem("cart", JSON.stringify(cartItems));
+      localStorage.setItem("cart", JSON.stringify(cartItems));
+    }
   };
 
   const handleDecrease = (item) => {
     if (item.quantity > 1) {
       item.quantity -= 1;
+      item.stock += 1;
+      toast.error("Product removed", {
+        duration: 3000,
+        position: "top-right",
+        style: {
+          background: "#E51313",
+          color: "#fff",
+          fontSize: "1.2rem",
+          marginRight: "1rem",
+        },
+      });
       setCartItems([...cartItems]);
 
       localStorage.setItem("cart", JSON.stringify(cartItems));
@@ -48,6 +73,16 @@ const CartPage = () => {
 
   const handleRemoveItem = (item) => {
     const updatedCart = cartItems.filter((cartItem) => cartItem.id !== item.id);
+    toast.error(`${item.quantity} ${item.name} removed`, {
+      duration: 3000,
+      position: "top-right",
+      style: {
+        background: "#E51313",
+        color: "#fff",
+        fontSize: "1.2rem",
+        marginRight: "1rem",
+      },
+    });
     setCartItems(updatedCart);
 
     updateLocalStorage(updatedCart);
@@ -71,7 +106,12 @@ const CartPage = () => {
         <div className="container">
           <div className="section-wrapper">
             {cartItems.length === 0 ? (
-              <h2 className="title text-center fs-1 text-danger">There are no products in the cart</h2>
+              <div className="d-flex flex-column justify-content-center align-items-center">
+                <h2 className="title text-center display-6 text-danger mb-4 fw-bold fst-italic">
+                  There are not products in the cart
+                </h2>
+                <Link className="fs-4 text-white fw-semibold bg-success py-2 px-3 rounded-2 mt-5" to="/shop">Go to Shop</Link>
+              </div>
             ) : (
               <>
                 <div className="cart-top">

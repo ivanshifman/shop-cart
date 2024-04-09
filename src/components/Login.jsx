@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthProvider";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -16,11 +16,17 @@ const socialList = [
 ];
 
 const Login = () => {
-  const { signUpWithGmail, login } = useContext(AuthContext);
+  const { signUpWithGmail, login, user } = useContext(AuthContext);
   const location = useLocation();
   const navigate = useNavigate();
   const from = location.state?.from?.pathname || "/";
   const [errorMessage, setErrorMessage] = useState("");
+
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
 
   const {
     register,
@@ -128,7 +134,9 @@ const Login = () => {
                   <span>{btnText}</span>
                 </button>
               </div>
-              {errorMessage && <p className="text-danger fw-bold">{errorMessage}</p>}
+              {errorMessage && (
+                <p className="text-danger fw-bold">{errorMessage}</p>
+              )}
             </form>
 
             <div className="account-bottom">

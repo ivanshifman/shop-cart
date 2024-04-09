@@ -105,6 +105,10 @@ const NavItems = () => {
                   id="dropdown-basic-button"
                   title="User"
                   variant="success"
+                  onClick={() => {
+                    setMenuToggle(false);
+                    setSocialToggle(false);
+                  }}
                 >
                   <Dropdown.Item as={Link} to="/cart-page">
                     Shopping Cart

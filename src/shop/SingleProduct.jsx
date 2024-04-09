@@ -17,7 +17,7 @@ const SingleProduct = () => {
     fetch("/src/products.json")
       .then((res) => res.json())
       .then((data) => setProducts(data));
-  }, []);
+  }, [id]);
 
   const result = product.filter((p) => p.id === id);
   const doubledResults = [...result, ...result];
