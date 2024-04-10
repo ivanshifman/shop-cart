@@ -12,7 +12,6 @@ const CheckOutPage = () => {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
     watch,
   } = useForm();
 
@@ -24,13 +23,6 @@ const CheckOutPage = () => {
 
   const onSubmit = (data) => {
     console.log(data);
-    reset();
-    handleOrderConfirm();
-  };
-
-  const onSubmitTwo = (data) => {
-    console.log(data);
-    reset();
     handleOrderConfirm();
   };
 
@@ -63,7 +55,7 @@ const CheckOutPage = () => {
             <div className="modal-body w-100">
               <div className="tabs mt-3">
                 <ul className="nav nav-tabs" id="myTab" role="tablist">
-                  <li className="nav-item" role="presentation">
+                  <li className="nav-item w-50" role="presentation">
                     <a
                       className={`nav-link ${
                         activeTab === "visa" ? "active" : ""
@@ -77,18 +69,14 @@ const CheckOutPage = () => {
                       />
                     </a>
                   </li>
-                  <li className="nav-item" role="presentation">
+                  <li className="nav-item w-50" role="presentation">
                     <a
                       className={`nav-link ${
-                        activeTab === "paypal" ? "active" : ""
+                        activeTab === "identity" ? "active" : ""
                       }`}
-                      onClick={() => handleTabChange("paypal")}
+                      onClick={() => handleTabChange("identity")}
                     >
-                      <img
-                        src="https://i.imgur.com/yK7EDD1.png"
-                        alt="paypal"
-                        width="80"
-                      />
+                      <i class="icofont-papers"></i>
                     </a>
                   </li>
                 </ul>
@@ -150,20 +138,20 @@ const CheckOutPage = () => {
                             {...register("phoneshop", {
                               required: {
                                 value: true,
-                                message: "Phone is required",
+                                message: "Number is required",
                               },
                               pattern: {
                                 value: /^[0-9]+$/,
-                                message: "Phone must contain only numbers",
+                                message: "Number must contain only numbers",
                               },
                               minLength: {
-                                value: 8,
-                                message: "Phone must be at least 8 characters",
+                                value: 16,
+                                message: "Number can only contain 16 characters",
                               },
                               maxLength: {
-                                value: 15,
+                                value: 16,
                                 message:
-                                  "Phone must be less than 15 characters",
+                                  "Number can only contain 16 characters",
                               },
                             })}
                           />
@@ -241,26 +229,26 @@ const CheckOutPage = () => {
 
                   <div
                     className={`tab-pane fade ${
-                      activeTab === "paypal" ? "show active" : ""
+                      activeTab === "identity" ? "show active" : ""
                     }`}
-                    id="paypal"
+                    id="identity"
                     role="tabpanel"
-                    aria-labelledby="paypal-tab"
+                    aria-labelledby="identity-tab"
                   >
                     <form
-                      onSubmit={handleSubmit(onSubmitTwo)}
+                      onSubmit={handleSubmit(onSubmit)}
                       className="mt-4 mx-4"
                     >
                       <div className="text-center">
-                        <h5>Paypal account info</h5>
+                        <h5>Identity information</h5>
                       </div>
                       <div className="form mt-3">
                         <div className="inputbox">
                           <input
                             type="text"
-                            id="namepaypal"
+                            id="nameidentity"
                             className="form-control"
-                            {...register("namepaypal", {
+                            {...register("nameidentity", {
                               required: {
                                 value: true,
                                 message: "Name is required",
@@ -281,18 +269,18 @@ const CheckOutPage = () => {
                             })}
                           />
                           <span>Your name </span>
-                          {errors.namepaypal && (
+                          {errors.nameidentity && (
                             <p className="p-error text-danger fw-bold">
-                              {errors.namepaypal.message}
+                              {errors.nameidentity.message}
                             </p>
                           )}
                         </div>
                         <div className="inputbox">
                           <input
                             type="tel"
-                            id="numberpaypal"
+                            id="numberidentity"
                             className="form-control"
-                            {...register("numberpaypal", {
+                            {...register("numberidentity", {
                               required: {
                                 value: true,
                                 message: "Phone is required",
@@ -313,9 +301,9 @@ const CheckOutPage = () => {
                             })}
                           />
                           <span>Your number </span>
-                          {errors.numberpaypal && (
+                          {errors.numberidentity && (
                             <p className="p-error text-danger fw-bold">
-                              {errors.numberpaypal.message}
+                              {errors.numberidentity.message}
                             </p>
                           )}
                         </div>
@@ -323,9 +311,9 @@ const CheckOutPage = () => {
                           <div className="inputbox">
                             <input
                               type="email"
-                              id="emailpaypal"
+                              id="emailidentity"
                               className="form-control"
-                              {...register("emailpaypal", {
+                              {...register("emailidentity", {
                                 required: {
                                   value: true,
                                   message: "Email is required",
@@ -338,9 +326,9 @@ const CheckOutPage = () => {
                               })}
                             />
                             <span>Enter your email </span>
-                            {errors.emailpaypal && (
+                            {errors.emailidentity && (
                               <p className="p-error text-danger fw-bold">
-                                {errors.emailpaypal.message}
+                                {errors.emailidentity.message}
                               </p>
                             )}
                           </div>
@@ -348,22 +336,22 @@ const CheckOutPage = () => {
                           <div className="inputbox">
                             <input
                               type="email"
-                              id="emailrepeatpay"
+                              id="emailrepeatidentity"
                               className="form-control"
-                              {...register("emailrepeatpay", {
+                              {...register("emailrepeatidentity", {
                                 required: {
                                   value: true,
                                   message: "Confirm email is required",
                                 },
                                 validate: (value) =>
-                                  value === watch("emailpaypal") ||
+                                  value === watch("emailidentity") ||
                                   "Emils do not match",
                               })}
                             />
                             <span>Repeat your email </span>
-                            {errors.emailrepeatpay && (
+                            {errors.emailrepeatidentity && (
                               <p className="p-error text-danger fw-bold">
-                                {errors.emailrepeatpay.message}
+                                {errors.emailrepeatidentity.message}
                               </p>
                             )}
                           </div>
@@ -372,9 +360,9 @@ const CheckOutPage = () => {
                           <button
                             type="submit"
                             className="btn btn-success btn-block w-100"
-                            onClick={handleSubmit(onSubmitTwo)}
+                            onClick={handleSubmit(onSubmit)}
                           >
-                            Add paypal
+                            Add information
                           </button>
                         </div>
                       </div>

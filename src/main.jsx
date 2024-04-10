@@ -21,7 +21,8 @@ import AuthProvider from "./context/AuthProvider.jsx";
 import PrivateRoute from "./privateRoute/PrivateRoute.jsx";
 import Login from "./components/Login.jsx";
 import SignUp from "./components/SignUp.jsx";
-import { Toaster } from 'react-hot-toast';
+import ForgetPass from "./components/ForgetPass.jsx";
+import { Toaster } from "react-hot-toast";
 
 const router = createBrowserRouter([
   {
@@ -52,6 +53,10 @@ const router = createBrowserRouter([
   {
     path: "/signup",
     element: <SignUp />,
+  },
+  {
+    path: "/forgetpass",
+    element: <ForgetPass />,
   },
 ]);
 
