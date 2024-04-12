@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { toast } from 'react-hot-toast';
-
+import { toast } from "react-hot-toast";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../firebase/firebase.config";
+import { AuthContext } from "../context/AuthProvider";
 
 const ProductDisplay = ({ item }) => {
   const desc =
@@ -12,6 +14,7 @@ const ProductDisplay = ({ item }) => {
   const [color, setColor] = useState("Select color");
   const [coupon, setCoupon] = useState("");
   const [notSelect, setNotSelect] = useState(null);
+  const { user, userCart, updateUserCart } = useContext(AuthContext);
 
   const handleSizeChange = (e) => {
     setSize(e.target.value);
@@ -39,53 +42,81 @@ const ProductDisplay = ({ item }) => {
     }
   }, [size, color]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (size === "Select size" || color === "Select color") {
-       setNotSelect(<p className="text-danger fs-6 fw-bolder mt-3">Please select size and color</p>)
-       return
+      setNotSelect(
+        <p className="text-danger fs-6 fw-bolder mt-3">
+          Please select size and color
+        </p>
+      );
+      return;
     }
 
-    item.stock -= preQuantity;
+    if (preQuantity > stock) {
+      toast.error("Not enough stock available", {
+        duration: 3000,
+        position: "top-right",
+        style: {
+          background: "#E51313",
+          color: "#fff",
+          fontSize: "1.2rem",
+          marginRight: "1rem",
+        },
+      });
+      return;
+    }
 
-    const product = {
-      id: id,
-      img: img,
-      name: name,
-      price: price,
-      quantity: preQuantity,
-      stock: stock - preQuantity,
-      size: size,
-      color: color,
-      coupon: coupon,
-    };
-
-    const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
-
-    const existingProductIndex = existingCart.findIndex(
-      (item) => item.id === id
+    const existingProductIndex = userCart.findIndex(
+      (cartItem) => cartItem.id === id
     );
 
+    let updatedCart;
+
     if (existingProductIndex !== -1) {
-      existingCart[existingProductIndex].quantity += preQuantity;
-      existingCart[existingProductIndex].stock -= preQuantity;
+      updatedCart = userCart.map((cartItem, index) => {
+        if (index === existingProductIndex) {
+          return {
+            ...cartItem,
+            quantity: cartItem.quantity + preQuantity,
+            stock: cartItem.stock - preQuantity,
+          };
+        }
+        return cartItem;
+      });
     } else {
-      existingCart.push(product);
+      updatedCart = [
+        ...userCart,
+        {
+          id: id,
+          img: img,
+          name: name,
+          price: price,
+          quantity: preQuantity,
+          stock: stock - preQuantity,
+          size: size,
+          color: color,
+          coupon: coupon,
+        },
+      ];
     }
+
+    const userCartRef = doc(db, "carts", user.uid);
+    await setDoc(userCartRef, { cartItems: updatedCart });
+
+    updateUserCart(updatedCart);
 
     toast.success(`${preQuantity} products added`, {
       duration: 3000,
-      position: 'top-right',
+      position: "top-right",
       style: {
-        background: '#367F32',
-        color: '#fff',
-        fontSize: '1.2rem',
-        marginRight: '1rem',
+        background: "#367F32",
+        color: "#fff",
+        fontSize: "1.2rem",
+        marginRight: "1rem",
       },
     });
-
-    localStorage.setItem("cart", JSON.stringify(existingCart));
 
     setPreQuantity(1);
     setSize("Select size");
@@ -135,7 +166,7 @@ const ProductDisplay = ({ item }) => {
               </select>
               <i className="icofont-rounded-down"></i>
             </div>
-            
+
             <div className="cart-plus-minus">
               <div className="dec qtybutton" onClick={handleDecrease}>
                 -

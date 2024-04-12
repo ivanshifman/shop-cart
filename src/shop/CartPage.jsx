@@ -1,19 +1,24 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import PageHeader from "../components/PageHeader";
 import { Link } from "react-router-dom";
 import delImgUrl from "../assets/images/shop/del.png";
 import CheckOutPage from "./CheckOutPage";
 import { toast } from "react-hot-toast";
+import { AuthContext } from "../context/AuthProvider";
+import { db } from "../firebase/firebase.config";
+import { doc, setDoc } from "firebase/firestore";
 
 const CartPage = () => {
   const [cartItems, setCartItems] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState("");
   const [cities, setCities] = useState([]);
+  const { user, userCart, updateUserCart } = useContext(AuthContext);
 
   useEffect(() => {
-    const storedCartItems = JSON.parse(localStorage.getItem("cart")) || [];
-    setCartItems(storedCartItems);
-  }, []);
+    if (user) {
+      setCartItems(userCart);
+    }
+  }, [user, userCart]);
 
   useEffect(() => {
     if (selectedCountry === "ar") {
@@ -33,8 +38,17 @@ const CartPage = () => {
 
   const handleIncrease = (item) => {
     if (item.stock > 0) {
-      item.quantity += 1;
-      item.stock -= 1;
+      const updatedCart = cartItems.map((cartItem) =>
+        cartItem.id === item.id
+          ? {
+              ...cartItem,
+              quantity: cartItem.quantity + 1,
+              stock: cartItem.stock - 1,
+            }
+          : cartItem
+      );
+      setCartItems(updatedCart);
+      updateFirebaseCart(updatedCart);
       toast.success("Product added", {
         duration: 3000,
         position: "top-right",
@@ -45,16 +59,22 @@ const CartPage = () => {
           marginRight: "1rem",
         },
       });
-      setCartItems([...cartItems]);
-
-      localStorage.setItem("cart", JSON.stringify(cartItems));
     }
   };
 
   const handleDecrease = (item) => {
     if (item.quantity > 1) {
-      item.quantity -= 1;
-      item.stock += 1;
+      const updatedCart = cartItems.map((cartItem) =>
+        cartItem.id === item.id
+          ? {
+              ...cartItem,
+              quantity: cartItem.quantity - 1,
+              stock: cartItem.stock + 1,
+            }
+          : cartItem
+      );
+      setCartItems(updatedCart);
+      updateFirebaseCart(updatedCart);
       toast.error("Product removed", {
         duration: 3000,
         position: "top-right",
@@ -65,31 +85,40 @@ const CartPage = () => {
           marginRight: "1rem",
         },
       });
-      setCartItems([...cartItems]);
-
-      localStorage.setItem("cart", JSON.stringify(cartItems));
     }
   };
 
-  const handleRemoveItem = (item) => {
+  const handleRemoveItem = async (item) => {
     const updatedCart = cartItems.filter((cartItem) => cartItem.id !== item.id);
-    toast.error(`${item.quantity} ${item.name} removed`, {
-      duration: 3000,
-      position: "top-right",
-      style: {
-        background: "#E51313",
-        color: "#fff",
-        fontSize: "1.2rem",
-        marginRight: "1rem",
-      },
-    });
     setCartItems(updatedCart);
+    updateFirebaseCart(updatedCart);
+    try {
+      const userCartRef = doc(db, "carts", user.uid);
+      await setDoc(userCartRef, { cartItems: updatedCart });
 
-    updateLocalStorage(updatedCart);
+      toast.error(`${item.quantity} ${item.name} removed`, {
+        duration: 3000,
+        position: "top-right",
+        style: {
+          background: "#E51313",
+          color: "#fff",
+          fontSize: "1.2rem",
+          marginRight: "1rem",
+        },
+      });
+    } catch (error) {
+      console.error("Error updating cart in Firebase:", error);
+    }
   };
 
-  const updateLocalStorage = (cart) => {
-    localStorage.setItem("cart", JSON.stringify(cart));
+  const updateFirebaseCart = async (updatedCart) => {
+    try {
+      const userCartRef = doc(db, "carts", user.uid);
+      await setDoc(userCartRef, { cartItems: updatedCart });
+      updateUserCart(updatedCart);
+    } catch (error) {
+      console.error("Error updating cart in Firebase:", error);
+    }
   };
 
   const cartSubTotal = cartItems.reduce((total, item) => {
@@ -110,7 +139,12 @@ const CartPage = () => {
                 <h2 className="title text-center display-6 text-danger mb-4 fw-bold fst-italic">
                   There are not products in the cart
                 </h2>
-                <Link className="fs-4 text-white fw-semibold bg-success py-2 px-3 rounded-2 mt-5" to="/shop">Go to Shop</Link>
+                <Link
+                  className="fs-4 text-white fw-semibold bg-success py-2 px-3 rounded-2 mt-5"
+                  to="/shop"
+                >
+                  Go to Shop
+                </Link>
               </div>
             ) : (
               <>
@@ -127,8 +161,8 @@ const CartPage = () => {
                     </thead>
 
                     <tbody>
-                      {cartItems.map((item, i) => (
-                        <tr key={i}>
+                      {cartItems.map((item) => (
+                        <tr key={item.id}>
                           <td className="product-item cat-product">
                             <div className="p-thumb">
                               <Link to={`/shop/${item.id}`}>

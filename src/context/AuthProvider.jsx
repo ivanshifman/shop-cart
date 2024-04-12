@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import app from "../firebase/firebase.config";
+import app, { db } from "../firebase/firebase.config";
 import {
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
@@ -10,6 +10,7 @@ import {
   signInWithPopup,
   signOut,
 } from "firebase/auth";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 
 export const AuthContext = createContext();
 
@@ -19,6 +20,7 @@ const googleProvider = new GoogleAuthProvider();
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [userCart, setUserCart] = useState([]);
 
   const createUser = (email, password) => {
     setLoading(true);
@@ -44,14 +46,34 @@ const AuthProvider = ({ children }) => {
     return signOut(auth);
   };
 
+  const updateUserCart = async (updatedCart) => {
+    setUserCart(updatedCart);
+
+    if (user) {
+      try {
+        const userCartRef = doc(db, "carts", user.uid);
+        await setDoc(userCartRef, { cartItems: updatedCart });
+      } catch (error) {
+        console.error("Error updating cart in Firebase:", error);
+      }
+    }
+  };
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       setLoading(false);
+
+      if (currentUser) {
+        const userCartRef = doc(db, "carts", currentUser.uid);
+        getDoc(userCartRef).then((docSnap) => {
+          if (docSnap.exists()) {
+            setUserCart(docSnap.data().cartItems);
+          }
+        });
+      }
     });
-    return () => {
-      return unsubscribe();
-    };
+    return () => unsubscribe();
   }, []);
 
   const authInfo = {
@@ -62,6 +84,8 @@ const AuthProvider = ({ children }) => {
     login,
     logOut,
     forgetPassword,
+    userCart,
+    updateUserCart,
   };
 
   return (
