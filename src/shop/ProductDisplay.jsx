@@ -8,13 +8,16 @@ import { AuthContext } from "../context/AuthProvider";
 const ProductDisplay = ({ item }) => {
   const desc =
     "Discover our versatile and high-quality product, designed to meet your needs. With innovative features and a modern design, it is perfect for any occasion.";
-  const { name, id, price, seller, ratingsCount, quantity, stock, img } = item;
+  const { name, id, price, seller, ratingsCount, quantity, img } = item;
   const [preQuantity, setPreQuantity] = useState(quantity);
   const [size, setSize] = useState("Select size");
   const [color, setColor] = useState("Select color");
-  const [coupon, setCoupon] = useState("");
   const [notSelect, setNotSelect] = useState(null);
+
   const { user, userCart, updateUserCart } = useContext(AuthContext);
+
+  const cartItem = userCart.find((cartItem) => cartItem.id === id);
+  const stock = cartItem ? cartItem.stock : item.stock;
 
   const handleSizeChange = (e) => {
     setSize(e.target.value);
@@ -54,20 +57,6 @@ const ProductDisplay = ({ item }) => {
       return;
     }
 
-    if (preQuantity > stock) {
-      toast.error("Not enough stock available", {
-        duration: 3000,
-        position: "top-right",
-        style: {
-          background: "#E51313",
-          color: "#fff",
-          fontSize: "1.2rem",
-          marginRight: "1rem",
-        },
-      });
-      return;
-    }
-
     const existingProductIndex = userCart.findIndex(
       (cartItem) => cartItem.id === id
     );
@@ -97,7 +86,6 @@ const ProductDisplay = ({ item }) => {
           stock: stock - preQuantity,
           size: size,
           color: color,
-          coupon: coupon,
         },
       ];
     }
@@ -121,7 +109,6 @@ const ProductDisplay = ({ item }) => {
     setPreQuantity(1);
     setSize("Select size");
     setColor("Select color");
-    setCoupon("");
   };
 
   return (
@@ -166,30 +153,28 @@ const ProductDisplay = ({ item }) => {
               </select>
               <i className="icofont-rounded-down"></i>
             </div>
-
-            <div className="cart-plus-minus">
-              <div className="dec qtybutton" onClick={handleDecrease}>
-                -
+            <div className="d-flex align-items-center justify-content-between w-100 my-2">
+              <div className="cart-plus-minus">
+                <div className="dec qtybutton" onClick={handleDecrease}>
+                  -
+                </div>
+                <input
+                  className="cart-plus-minus-box"
+                  type="text"
+                  name="qtybutton"
+                  id="qtybutton"
+                  value={preQuantity}
+                  readOnly
+                />
+                <div className="inc qtybutton" onClick={handleIncrease}>
+                  +
+                </div>
               </div>
-              <input
-                className="cart-plus-minus-box"
-                type="text"
-                name="qtybutton"
-                id="qtybutton"
-                value={preQuantity}
-                readOnly
-              />
-              <div className="inc qtybutton" onClick={handleIncrease}>
-                +
+              <div className="discount-code ms-2 mb-4 mb-sm-1 w-50">
+                <span className="text-black fs-6 ">
+                  Stock: <span className="ms-2">{stock}</span>
+                </span>
               </div>
-            </div>
-
-            <div className="discount-code mb-2">
-              <input
-                type="text"
-                placeholder="Enter discount code"
-                onChange={(e) => setCoupon(e.target.value)}
-              />
             </div>
 
             <button type="submit" className="lab-btn">

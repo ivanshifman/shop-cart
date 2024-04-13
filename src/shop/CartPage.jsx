@@ -12,6 +12,8 @@ const CartPage = () => {
   const [cartItems, setCartItems] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState("");
   const [cities, setCities] = useState([]);
+  const [discountCode, setDiscountCode] = useState("");
+  const [validDiscount, setValidDiscount] = useState(false);
   const { user, userCart, updateUserCart } = useContext(AuthContext);
 
   useEffect(() => {
@@ -33,7 +35,8 @@ const CartPage = () => {
   }, [selectedCountry]);
 
   const calculateTotalPrice = (item) => {
-    return item.price * item.quantity;
+    const price = validDiscount ? item.price * 0.9 : item.price;
+    return price * item.quantity;
   };
 
   const handleIncrease = (item) => {
@@ -108,6 +111,36 @@ const CartPage = () => {
       });
     } catch (error) {
       console.error("Error updating cart in Firebase:", error);
+    }
+  };
+
+  const handleApplyCoupon = (e) => {
+    e.preventDefault();
+
+    if (discountCode === "SHOP10") {
+      setValidDiscount(true);
+      toast.success("Discount applied", {
+        duration: 3000,
+        position: "top-right",
+        style: {
+          background: "#367F32",
+          color: "#fff",
+          fontSize: "1.2rem",
+          marginRight: "1rem",
+        },
+      });
+    } else {
+      setValidDiscount(false);
+      toast.error("Invalid discount code", {
+        duration: 3000,
+        position: "top-right",
+        style: {
+          background: "#E51313",
+          color: "#fff",
+          fontSize: "1.2rem",
+          marginRight: "1rem",
+        },
+      });
     }
   };
 
@@ -201,7 +234,14 @@ const CartPage = () => {
                           </td>
 
                           <td className="cat-toprice">
-                            ${calculateTotalPrice(item)}
+                            {validDiscount ? (
+                              <span>
+                                ${calculateTotalPrice(item).toFixed(1)}{" "}
+                                <span className="text-danger ms-2">-10%</span>
+                              </span>
+                            ) : (
+                              `$${calculateTotalPrice(item)}`
+                            )}
                           </td>
 
                           <td className="cat-edit">
@@ -217,16 +257,15 @@ const CartPage = () => {
 
                 <div className="cart-bottom">
                   <div className="cart-checkout-box">
-                    <form
-                      className="coupon"
-                      onClick={(e) => e.preventDefault()}
-                    >
+                    <form className="coupon" onSubmit={handleApplyCoupon}>
                       <input
                         className="cart-page-input-text"
                         type="text"
                         name="coupon"
                         id="coupon"
                         placeholder="Coupon code ...."
+                        value={discountCode}
+                        onChange={(e) => setDiscountCode(e.target.value)}
                       />
                       <input type="submit" value="Apply coupon" />
                     </form>
@@ -306,6 +345,14 @@ const CartPage = () => {
                                 Shipping and handling
                               </span>
                               <p className="pull-right">Free shipping</p>
+                            </li>
+                            <li>
+                              <span className="pull-left">
+                                Purchase discount
+                              </span>
+                              <p className="pull-right">
+                                {validDiscount ? "Yes" : "No"}
+                              </p>
                             </li>
                             <li>
                               <span className="pull-left">Order total</span>
