@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AuthContext } from "../context/AuthProvider";
 import { useNavigate, useLocation, Link } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const title = "Recover password";
 const btnText = "Send";
@@ -30,7 +31,7 @@ const ForgetPass = () => {
     const email = watch("emailforget");
     try {
       await forgetPassword(email);
-      alert("Message sent, check your email box");
+      toast.error("Message sent, check your email box")
       navigate(from, { replace: true });
     } catch (error) {
       setErrorMessage(

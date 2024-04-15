@@ -1,6 +1,10 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Ratting from "../components/Ratting";
 import { useForm } from "react-hook-form";
+import { AuthContext } from "../context/AuthProvider";
+import { addDoc, collection } from "firebase/firestore";
+import toast from "react-hot-toast";
+import { db } from "../firebase/firebase.config";
 
 const reviwtitle = "Add a Review";
 
@@ -45,8 +49,19 @@ const Review = ({ item }) => {
     reset,
   } = useForm();
 
+  const { user } = useContext(AuthContext);
+
+  const userEmail = user?.email;
+
   const onSubmit = (data) => {
-    console.log(data);
+    const client = {
+      information: data,
+      userId: user.uid,
+      userEmail: user.email,
+    };
+    const clientContact = collection(db, "clientContact");
+    addDoc(clientContact, client);
+    toast.success("Your message has been sent");
     reset();
   };
 
@@ -148,6 +163,8 @@ const Review = ({ item }) => {
                           /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
                         message: "Invalid email",
                       },
+                      validate: (value) =>
+                      value === userEmail || "Emails do not match user's email",
                     })}
                   />
                   {errors.email && (

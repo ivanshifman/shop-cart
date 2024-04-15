@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/images/logo/logo.png";
 import { AuthContext } from "../context/AuthProvider";
 import { Dropdown, DropdownButton, NavDropdown } from "react-bootstrap";
+import toast from "react-hot-toast";
 
 const NavItems = () => {
   const [menuToggle, setMenuToggle] = useState(false);
@@ -16,7 +17,7 @@ const NavItems = () => {
   const handleLogOut = () => {
     logOut()
       .then(() => {
-        alert("Sign-out succesfully");
+        toast.success("Sign-out succesfully")
         navigate("/");
       })
       .catch((error) => {

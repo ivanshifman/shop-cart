@@ -1,4 +1,9 @@
+import { addDoc, collection } from "firebase/firestore";
 import { useForm } from "react-hook-form";
+import { db } from "../firebase/firebase.config";
+import { AuthContext } from "../context/AuthProvider";
+import { useContext } from "react";
+import toast from "react-hot-toast";
 
 const subtitle = "Save the day";
 const title = (
@@ -19,8 +24,19 @@ const Register = () => {
     reset,
   } = useForm();
 
+  const { user } = useContext(AuthContext);
+
+  const userEmail = user?.email;
+
   const onSubmit = (data) => {
-    console.log(data);
+    const client = {
+      information: data,
+      userId: user.uid,
+      userEmail: user.email,
+    };
+    const clientContact = collection(db, "clientContact");
+    addDoc(clientContact, client);
+    toast.success("Your message has been sent");
     reset();
   };
 
@@ -86,6 +102,9 @@ const Register = () => {
                           /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
                         message: "Invalid email",
                       },
+                      validate: (value) =>
+                        value === userEmail ||
+                        "Emails do not match user's email",
                     })}
                   />
                   {errors.email && (

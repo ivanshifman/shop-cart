@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthProvider";
+import toast from "react-hot-toast";
 
 const title = "Register";
 const socialTitle = "Login with social media";
@@ -52,7 +53,7 @@ const SignUp = () => {
     createUser(email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-        alert("Account creted succesfully done!");
+        toast.success("Account creted succesfully done!")
         navigate(from, { replace: true });
       })
       .catch((error) => {

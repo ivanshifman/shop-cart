@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthProvider";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
 const title = "Login";
 const socialTitle = "Login with social media";
@@ -41,7 +42,7 @@ const Login = () => {
     login(email, password)
       .then((res) => {
         const user = res.user;
-        alert("Login successfully");
+        toast.success("Login successfully")
         navigate(from, { replace: true });
       })
       .catch((error) => {

@@ -1,12 +1,17 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import "../components/modal.css";
 import { useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthProvider";
+import toast from "react-hot-toast";
+import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import { db } from "../firebase/firebase.config";
 
 const CheckOutPage = () => {
   const [show, setShow] = useState(false);
   const [activeTab, setActiveTab] = useState("visa");
+  const { user, userCart, updateUserCart } = useContext(AuthContext);
 
   const {
     register,
@@ -15,15 +20,27 @@ const CheckOutPage = () => {
     watch,
   } = useForm();
 
-  const handleOrderConfirm = () => {
-    alert("Your order is placed successfuly!");
-    localStorage.removeItem("cart");
-    navigate(from, { replace: true });
-  };
+  const userEmail = user?.email
 
-  const onSubmit = (data) => {
-    console.log(data);
-    handleOrderConfirm();
+  const handleOrderConfirm = async (data) => {
+    try {
+      const userCartRef = doc(db, "carts", user.uid);
+      await setDoc(userCartRef, { cartItems: [] });
+      updateUserCart([]);
+      const client = {
+        information: data,
+        cart: userCart,
+        userId: user.uid,
+        userEmail: user.email,
+      };
+      const clientCart = collection(db, "cartshop");
+      addDoc(clientCart, client);
+      toast.success("Your order is placed successfuly!");
+      navigate(from, { replace: true });
+    } catch (error) {
+      console.error("Error completing purchase:", error);
+      toast.error("Failed to complete purchase. Please try again.");
+    }
   };
 
   const handleTabChange = (tabId) => {
@@ -76,7 +93,7 @@ const CheckOutPage = () => {
                       }`}
                       onClick={() => handleTabChange("identity")}
                     >
-                      <i class="icofont-papers"></i>
+                      <i className="icofont-papers"></i>
                     </a>
                   </li>
                 </ul>
@@ -95,7 +112,7 @@ const CheckOutPage = () => {
                         <h5>Credit card</h5>
                       </div>
                       <form
-                        onSubmit={handleSubmit(onSubmit)}
+                        onSubmit={handleSubmit(handleOrderConfirm)}
                         className="form mt-3"
                       >
                         <div className="inputbox">
@@ -146,7 +163,8 @@ const CheckOutPage = () => {
                               },
                               minLength: {
                                 value: 16,
-                                message: "Number can only contain 16 characters",
+                                message:
+                                  "Number can only contain 16 characters",
                               },
                               maxLength: {
                                 value: 16,
@@ -218,7 +236,7 @@ const CheckOutPage = () => {
                           <button
                             type="submit"
                             className="btn btn-success btn-block w-100"
-                            onClick={handleSubmit(onSubmit)}
+                            onClick={handleSubmit(handleOrderConfirm)}
                           >
                             Add card
                           </button>
@@ -236,7 +254,7 @@ const CheckOutPage = () => {
                     aria-labelledby="identity-tab"
                   >
                     <form
-                      onSubmit={handleSubmit(onSubmit)}
+                      onSubmit={handleSubmit(handleOrderConfirm)}
                       className="mt-4 mx-4"
                     >
                       <div className="text-center">
@@ -323,6 +341,9 @@ const CheckOutPage = () => {
                                     /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
                                   message: "Invalid email",
                                 },
+                                validate: (value) =>
+                                  value === userEmail ||
+                                  "Emails do not match user's email",
                               })}
                             />
                             <span>Enter your email </span>
@@ -360,7 +381,7 @@ const CheckOutPage = () => {
                           <button
                             type="submit"
                             className="btn btn-success btn-block w-100"
-                            onClick={handleSubmit(onSubmit)}
+                            onClick={handleSubmit(handleOrderConfirm)}
                           >
                             Add information
                           </button>

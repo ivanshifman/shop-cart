@@ -1,6 +1,11 @@
 import { useForm } from "react-hook-form";
 import GoogleMap from "../components/GoogleMap";
 import PageHeader from "../components/PageHeader";
+import toast from "react-hot-toast";
+import { AuthContext } from "../context/AuthProvider";
+import { useContext } from "react";
+import { addDoc, collection } from "firebase/firestore";
+import { db } from "../firebase/firebase.config";
 
 const subTitle = "Get in touch with us";
 const title = "We're always eager to hear from you!";
@@ -37,6 +42,7 @@ const contactList = [
 ];
 
 const Contact = () => {
+  const { user } = useContext(AuthContext);
   const {
     register,
     handleSubmit,
@@ -44,8 +50,17 @@ const Contact = () => {
     reset,
   } = useForm();
 
+  const userEmail = user?.email
+
   const onSubmit = (data) => {
-    console.log(data);
+    const client = {
+      information: data,
+      userId: user.uid,
+      userEmail: user.email,
+    };
+    const clientContact = collection(db, "clientContact");
+    addDoc(clientContact, client);
+    toast.success("Your message has been sent");
     reset();
   };
 
@@ -136,6 +151,8 @@ const Contact = () => {
                       value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
                       message: "Invalid email",
                     },
+                    validate: (value) =>
+                      value === userEmail || "Emails do not match user's email",
                   })}
                 />
                 {errors.emailcon && (
