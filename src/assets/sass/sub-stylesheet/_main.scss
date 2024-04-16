@@ -1369,7 +1369,7 @@
     left: 0;
     @extend %w-100;
     @extend %h-100;
-    background: url(../../assets/images/shape-img/08.png) no-repeat;
+    background: black no-repeat;
     background-position: center;
     background-size: 115% 30%;
   }
@@ -1664,7 +1664,7 @@
     left: 0;
     @extend %w-100;
     @extend %h-100;
-    background: url(../../assets/images/shape-img/07.png) no-repeat;
+    background: black no-repeat;
     background-position: center;
     background-size: cover;
   }
@@ -2264,7 +2264,7 @@
     top: 60%;
     width: 85%;
     height: 60%;
-    background-image: url(../../assets/images/shape-img/10.png);
+    background: black;
     background-repeat: no-repeat;
     transform: translateY(-50%);
     background-size: 70%;
@@ -2309,7 +2309,7 @@
 
 // achievement-section
 .achievement-section {
-  background: url(../../assets/images/shape-img/02.png) no-repeat;
+  background: black no-repeat;
   background-position: center;
   .section-header {
     margin-bottom: 30px;
@@ -2343,7 +2343,7 @@
   &.style-3 {
     background: $ash-color;
     @include breakpoint(lg) {
-      background: url(../../assets/images/shape-img/05.png) no-repeat;
+      background: black no-repeat;
       background-size: 100% 100%;
       background-position: center;
     }
