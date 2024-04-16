@@ -84,8 +84,8 @@ const CategoryShowCase = () => {
 
   const filterItem = (categItem) => {
     const updateItems = ProductData.filter((curElem) => {
-        return curElem.cate === categItem;
-    })
+      return curElem.cate === categItem;
+    });
 
     setItems(updateItems);
   };

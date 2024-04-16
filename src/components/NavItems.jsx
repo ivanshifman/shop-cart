@@ -17,7 +17,7 @@ const NavItems = () => {
   const handleLogOut = () => {
     logOut()
       .then(() => {
-        toast.success("Sign-out succesfully")
+        toast.success("Sign-out succesfully");
         navigate("/");
       })
       .catch((error) => {

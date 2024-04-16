@@ -50,7 +50,7 @@ const Contact = () => {
     reset,
   } = useForm();
 
-  const userEmail = user?.email
+  const userEmail = user?.email;
 
   const onSubmit = (data) => {
     const client = {

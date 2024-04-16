@@ -20,7 +20,7 @@ const CheckOutPage = () => {
     watch,
   } = useForm();
 
-  const userEmail = user?.email
+  const userEmail = user?.email;
 
   const handleOrderConfirm = async (data) => {
     try {

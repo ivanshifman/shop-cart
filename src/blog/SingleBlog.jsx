@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import blogList from "../utilis/blogdata";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import PageHeader from "../components/PageHeader";
 import Tags from "../shop/Tags";
 import PopularPost from "../shop/PopularPost";
@@ -14,14 +14,35 @@ const socialList = [
 ];
 
 const SingleBlog = () => {
-  const [blog, setBlog] = useState(blogList);
   const { id } = useParams();
-  const result = blog.filter((b) => b.id === Number(id));
+  const result = blogList.filter((b) => b.id === Number(id));
+  const [currentBlogIndex, setCurrentBlogIndex] = useState(-1);
+  const [currentBlog, setCurrentBlog] = useState(null);
+
+  useEffect(() => {
+    setCurrentBlog(result[0]);
+    setCurrentBlogIndex(blogList.findIndex((b) => b.id === Number(id)));
+    window.scrollTo(0, 0);
+  }, [id, blogList]);
+
+  const getPreviousBlog = () => {
+    if (currentBlogIndex > 0) {
+      return blogList[currentBlogIndex - 1];
+    }
+    return null;
+  };
+
+  const getNextBlog = () => {
+    if (currentBlogIndex < blogList.length - 1) {
+      return blogList[currentBlogIndex + 1];
+    }
+    return null;
+  };
 
   return (
     <div>
       <PageHeader
-        title={result.map((titleBlog) => titleBlog.title)}
+        title={currentBlog && currentBlog.title}
         curPage={"Blog / Blog details"}
       />
 
@@ -157,21 +178,41 @@ const SingleBlog = () => {
 
                       <div className="navigations-part">
                         <div className="left">
-                          <a href="#" className="prev">
-                            <i className="icofont-double-left"></i> Previous
-                            blog
-                          </a>
-                          <a href="#" className="title">
-                            See previous blog
-                          </a>
+                          {getPreviousBlog() && (
+                            <Link
+                              to={`/blog/${getPreviousBlog().id}`}
+                              className="prev"
+                            >
+                              <i className="icofont-double-left"></i> Previous
+                              blog
+                            </Link>
+                          )}
+                          {getPreviousBlog() && (
+                            <Link
+                              to={`/blog/${getPreviousBlog().id}`}
+                              className="title"
+                            >
+                              See previous blog
+                            </Link>
+                          )}
                         </div>
                         <div className="right">
-                          <a href="#" className="next">
-                            Next blog <i className="icofont-double-right"></i>
-                          </a>
-                          <a href="#" className="title">
-                            See next blog
-                          </a>
+                          {getNextBlog() && (
+                            <Link
+                              to={`/blog/${getNextBlog().id}`}
+                              className="next"
+                            >
+                              Next blog <i className="icofont-double-right"></i>
+                            </Link>
+                          )}
+                          {getNextBlog() && (
+                            <Link
+                              to={`/blog/${getNextBlog().id}`}
+                              className="title"
+                            >
+                              See next blog
+                            </Link>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -180,10 +221,10 @@ const SingleBlog = () => {
               </article>
             </div>
             <div className="col-lg-4 col-12">
-                <aside>
-                    <Tags />
-                    <PopularPost />
-                </aside>
+              <aside>
+                <Tags />
+                <PopularPost />
+              </aside>
             </div>
           </div>
         </div>

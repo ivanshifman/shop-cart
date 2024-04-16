@@ -15,7 +15,9 @@ const Banner = () => {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [filteredProducts, setFilteredProducts] = useState(productData);
 
-  const categories = Array.from(new Set(productData.map((product) => product.category)));
+  const categories = Array.from(
+    new Set(productData.map((product) => product.category))
+  );
 
   const handleSearch = (e) => {
     const searchTerm = e.target.value;
@@ -23,7 +25,9 @@ const Banner = () => {
 
     const filtered = productData.filter(
       (product) =>
-        product.name.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase()) &&
+        product.name
+          .toLocaleLowerCase()
+          .includes(searchTerm.toLocaleLowerCase()) &&
         (selectedCategory === "all" || product.category === selectedCategory)
     );
 
@@ -36,7 +40,9 @@ const Banner = () => {
     const filtered = productData.filter(
       (product) =>
         (category === "all" || product.category === category) &&
-        product.name.toLocaleLowerCase().includes(searchInput.toLocaleLowerCase())
+        product.name
+          .toLocaleLowerCase()
+          .includes(searchInput.toLocaleLowerCase())
     );
     setFilteredProducts(filtered);
   };

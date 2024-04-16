@@ -53,7 +53,7 @@ const SignUp = () => {
     createUser(email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-        toast.success("Account creted succesfully done!")
+        toast.success("Account creted succesfully done!");
         navigate(from, { replace: true });
       })
       .catch((error) => {

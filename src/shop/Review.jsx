@@ -164,7 +164,8 @@ const Review = ({ item }) => {
                         message: "Invalid email",
                       },
                       validate: (value) =>
-                      value === userEmail || "Emails do not match user's email",
+                        value === userEmail ||
+                        "Emails do not match user's email",
                     })}
                   />
                   {errors.email && (

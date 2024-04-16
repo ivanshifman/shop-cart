@@ -42,7 +42,7 @@ const Login = () => {
     login(email, password)
       .then((res) => {
         const user = res.user;
-        toast.success("Login successfully")
+        toast.success("Login successfully");
         navigate(from, { replace: true });
       })
       .catch((error) => {

@@ -6,27 +6,27 @@ import { Autoplay } from "swiper/modules";
 const sponsorList = [
   {
     imgUrl: "/src/assets/images/sponsor/01.png",
-    imgAlt: "sponsor-1"
+    imgAlt: "sponsor-1",
   },
   {
     imgUrl: "/src/assets/images/sponsor/02.png",
-    imgAlt: "sponsor-2"
+    imgAlt: "sponsor-2",
   },
   {
     imgUrl: "/src/assets/images/sponsor/03.png",
-    imgAlt: "sponsor-3"
+    imgAlt: "sponsor-3",
   },
   {
     imgUrl: "/src/assets/images/sponsor/04.png",
-    imgAlt: "sponsor-4"
+    imgAlt: "sponsor-4",
   },
   {
     imgUrl: "/src/assets/images/sponsor/05.png",
-    imgAlt: "sponsor-5"
+    imgAlt: "sponsor-5",
   },
   {
     imgUrl: "/src/assets/images/sponsor/06.png",
-    imgAlt: "sponsor-6"
+    imgAlt: "sponsor-6",
   },
 ];
 
@@ -39,12 +39,10 @@ const Sponsor = () => {
             <Swiper
               slidesPerView={2}
               spaceBetween={20}
-              autoplay={
-                {
-                    delay: 2000,
-                    disableOnInteraction: false
-                }
-              }
+              autoplay={{
+                delay: 2000,
+                disableOnInteraction: false,
+              }}
               breakpoints={{
                 640: {
                   slidesPerView: 1,
@@ -62,17 +60,15 @@ const Sponsor = () => {
               modules={[Autoplay]}
               className="mySwiper"
             >
-             {
-                sponsorList.map((val, i) => (
-                    <SwiperSlide key={i}>
-                        <div className="sponsor-item">
-                            <div className="sponsor-thumb">
-                                <img src={val.imgUrl} alt={val.imgAlt}/>
-                            </div>
-                        </div>
-                    </SwiperSlide>
-                ))
-             }
+              {sponsorList.map((val, i) => (
+                <SwiperSlide key={i}>
+                  <div className="sponsor-item">
+                    <div className="sponsor-thumb">
+                      <img src={val.imgUrl} alt={val.imgAlt} />
+                    </div>
+                  </div>
+                </SwiperSlide>
+              ))}
             </Swiper>
           </div>
         </div>
