@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import PageHeader from "../components/PageHeader";
 import { Link } from "react-router-dom";
-import delImgUrl from "../assets/images/shop/del.png";
+import delImgUrl from "/images/shop/del.png";
 import CheckOutPage from "./CheckOutPage";
 import { toast } from "react-hot-toast";
 import { AuthContext } from "../context/AuthProvider";

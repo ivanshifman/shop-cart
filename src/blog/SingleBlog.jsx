@@ -103,7 +103,7 @@ const SingleBlog = () => {
                                 </p>
 
                                 <img
-                                  src="/src/assets/images/blog/single/01.jpg"
+                                  src="/images/blog/single/01.jpg"
                                   alt="img-blog-p1"
                                 />
 
@@ -124,7 +124,7 @@ const SingleBlog = () => {
 
                                 <div className="video-thumb">
                                   <img
-                                    src="/src/assets/images/blog/single/02.jpg"
+                                    src="/images/blog/single/02.jpg"
                                     alt="img-blog-p2"
                                   />
                                   <a

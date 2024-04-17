@@ -1,4 +1,4 @@
-import Data from "../products.json";
+import Data from "../../public/products.json";
 
 const ShopCategory = ({
   filterItem,

@@ -5,27 +5,27 @@ import { Autoplay } from "swiper/modules";
 
 const sponsorList = [
   {
-    imgUrl: "/src/assets/images/sponsor/01.png",
+    imgUrl: "/images/sponsor/01.png",
     imgAlt: "sponsor-1",
   },
   {
-    imgUrl: "/src/assets/images/sponsor/02.png",
+    imgUrl: "/images/sponsor/02.png",
     imgAlt: "sponsor-2",
   },
   {
-    imgUrl: "/src/assets/images/sponsor/03.png",
+    imgUrl: "/images/sponsor/03.png",
     imgAlt: "sponsor-3",
   },
   {
-    imgUrl: "/src/assets/images/sponsor/04.png",
+    imgUrl: "/images/sponsor/04.png",
     imgAlt: "sponsor-4",
   },
   {
-    imgUrl: "/src/assets/images/sponsor/05.png",
+    imgUrl: "/images/sponsor/05.png",
     imgAlt: "sponsor-5",
   },
   {
-    imgUrl: "/src/assets/images/sponsor/06.png",
+    imgUrl: "/images/sponsor/06.png",
     imgAlt: "sponsor-6",
   },
 ];

@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import logo from "../assets/images/logo/logo.png";
+import logo from "/images/logo/logo.png";
 import { AuthContext } from "../context/AuthProvider";
 import { Dropdown, DropdownButton, NavDropdown } from "react-bootstrap";
 import toast from "react-hot-toast";
